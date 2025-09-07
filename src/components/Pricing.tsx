@@ -294,7 +294,7 @@ const Pricing: React.FC = () => {
               
               <div className="space-y-4">
                 <a 
-                  href={selectedPaymentOption === 'standard' ? 'https://remarketing-orcin.vercel.app/' : 'https://pay.kiwify.com.br/jk0QIb9'} 
+                  href={selectedPaymentOption === 'standard' ? 'https://pay.kiwify.com.br/jk0QIb9' : 'https://pay.kiwify.com.br/jk0QIb9'} 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
@@ -316,7 +316,7 @@ const Pricing: React.FC = () => {
                 </a>
                 
                 <a 
-                  href={selectedPaymentOption === 'standard' ? 'https://remarketing-orcin.vercel.app/' : 'https://app.pushinpay.com.br/service/pay/9F2F7657-66AE-46EB-B770-BC034D63EBA9'} 
+                  href={selectedPaymentOption === 'standard' ? 'https://app.pushinpay.com.br/service/pay/9F2F7657-66AE-46EB-B770-BC034D63EBA9' : 'https://app.pushinpay.com.br/service/pay/9F2F7657-66AE-46EB-B770-BC034D63EBA9'} 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
