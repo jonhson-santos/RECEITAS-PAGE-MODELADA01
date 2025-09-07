@@ -35,8 +35,33 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Só carrega em produção (não em localhost)
-      if (window.location.hostname !== 'localhost' && window.location.port !== '5173') {
+      // UTMify Pixel - Verificação simples para desenvolvimento
+      if (window.location.href.includes('localhost:5173')) {
+        // DESENVOLVIMENTO - Mock completo
+        console.log('UTMify pixel não carregado em localhost - apenas em produção');
+        
+        // Mock do fetch para interceptar todas as chamadas
+        const originalFetch = window.fetch;
+        window.fetch = function(...args) {
+          console.log('Development Mock - Fetch intercepted:', args[0]);
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ success: true }),
+            text: () => Promise.resolve('OK'),
+            blob: () => Promise.resolve(new Blob()),
+            arrayBuffer: () => Promise.resolve(new ArrayBuffer(0))
+          });
+        };
+        
+        // Mock do objeto utmify
+        window.utmify = {
+          pixel: {
+            track: function(eventName, data) {
+              console.log('UTMify Mock - Event:', eventName, data);
+            }
+          }
+        };
+      } else {
         // PRODUÇÃO - Carregar pixel UTMify
         window.pixelId = "68ba7e479f0bdf71d9364f2d";
         
@@ -101,53 +126,7 @@
             }
           }
         });
-      } else {
-        // DESENVOLVIMENTO - Mock completo
-        console.log('UTMify pixel não carregado em localhost - apenas em produção');
-        
-        // Mock do fetch para interceptar todas as chamadas
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-          console.log('Development Mock - Fetch intercepted:', args[0]);
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve({ success: true }),
-            text: () => Promise.resolve('OK'),
-            blob: () => Promise.resolve(new Blob()),
-            arrayBuffer: () => Promise.resolve(new ArrayBuffer(0))
-          });
-        };
-        
-        // Mock do objeto utmify
-        window.utmify = {
-          pixel: {
-            track: function(eventName, data) {
-              console.log('UTMify Mock - Event:', eventName, data);
-            }
-          }
-        };
       }
-      
-      // Rastrear scroll depth (funciona tanto em dev quanto prod)
-      let maxScrollDepth = 0;
-      window.addEventListener('scroll', function() {
-        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        
-        if (scrollDepth > maxScrollDepth) {
-          maxScrollDepth = scrollDepth;
-          
-          // Rastrear marcos importantes de scroll
-          if ([25, 50, 75, 90].includes(scrollDepth)) {
-            if (window.utmify && window.utmify.pixel) {
-              window.utmify.pixel.track('ScrollDepth', {
-                depth: scrollDepth,
-                pageUrl: window.normalizedUrl || window.location.href,
-                timestamp: new Date().toISOString()
-              });
-            }
-          }
-        }
-      });
     </script>
   </head>
   <body>
