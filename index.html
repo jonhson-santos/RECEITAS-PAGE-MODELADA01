@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Farmácia Natural em Casa | Remédios Naturais Para Toda Família</title>
+    <meta name="description" content="Descubra como tratar naturalmente diabetes, insônia, ansiedade e mais com ingredientes da sua cozinha. Guia completo de receitas naturais." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+      // ALTERE O LINK PARA A PÁGINA QUE QUISER MOSTRAR QUANDO O USUÁRIO TENTAR SAIR
+      const link = 'https://remarketing-orcin.vercel.app/';
+
+      function setBackRedirect(url) {
+        let urlBackRedirect = url;
+        urlBackRedirect = urlBackRedirect =
+          urlBackRedirect.trim() +
+          (urlBackRedirect.indexOf('?') > 0 ? '&' : '?') +
+          document.location.search.replace('?', '').toString();
+
+        history.pushState({}, '', location.href);
+        history.pushState({}, '', location.href);
+        history.pushState({}, '', location.href);
+
+        window.addEventListener('popstate', () => {
+          console.log('onpopstate', urlBackRedirect);
+          setTimeout(() => {
+            location.href = urlBackRedirect;
+          }, 1);
+        });
+      }
+
+      setBackRedirect(link);
+    </script>
+    <script type="module">
+      // Only load UTMify scripts in production
+      if (import.meta.env.MODE === 'production') {
+        // Load UTMs script
+        const utmsScript = document.createElement("script");
+        utmsScript.setAttribute("src", "https://cdn.utmify.com.br/scripts/utms/latest.js");
+        utmsScript.setAttribute("data-utmify-prevent-xcod-sck", "");
+        utmsScript.setAttribute("data-utmify-prevent-subids", "");
+        utmsScript.setAttribute("async", "");
+        utmsScript.setAttribute("defer", "");
+        document.head.appendChild(utmsScript);
+        
+        window.pixelId = "68ba7e479f0bdf71d9364f2d";
+        
+        // Configuração para capturar todas as métricas
+        window.pixelConfig = {
+          trackPageView: true,
+          trackClicks: true,
+          trackScrollDepth: true,
+          trackTimeOnPage: true,
+          trackFormSubmissions: true,
+          trackButtonClicks: true,
+          trackVideoViews: true,
+          trackDownloads: true,
+          trackOutboundLinks: true,
+          trackCustomEvents: true
+        };
+        
+        // Função para normalizar a URL removendo parâmetros da Vercel
+        function normalizeUrl() {
+          const url = window.location.href;
+          const baseUrl = url.split('?')[0]; // Remove query parameters
+          const pathParts = baseUrl.split('/');
+          
+          // Remove parâmetros aleatórios da Vercel (geralmente são strings curtas no final)
+          if (pathParts.length > 3) {
+            const lastPart = pathParts[pathParts.length - 1];
+            // Se o último segmento parece ser um parâmetro da Vercel (curto e aleatório)
+            if (lastPart.length < 10 && /^[a-zA-Z0-9]+$/.test(lastPart) && lastPart !== 'index') {
+              pathParts.pop();
+            }
+          }
+          
+          return pathParts.join('/');
+        }
+        
+        // Configurar URL normalizada para o pixel
+        window.normalizedUrl = normalizeUrl();
+        
+        // Rastrear visualização de página com URL normalizada
+        window.addEventListener('load', function() {
+          if (window.utmify && window.utmify.pixel) {
+            window.utmify.pixel.track('PageView', {
+              url: window.normalizedUrl,
+              title: document.title,
+              referrer: document.referrer,
+              timestamp: new Date().toISOString()
+            });
+          }
+        });
+        
+        // Rastrear cliques em botões e links importantes
+        document.addEventListener('click', function(e) {
+          const target = e.target.closest('a, button');
+          if (target) {
+            const text = target.textContent.trim();
+            const href = target.href || '';
+            
+            // Rastrear cliques em CTAs importantes
+            if (text.includes('Quero') || text.includes('Garantir') || text.includes('Acesso') || 
+                text.includes('Comprar') || text.includes('Pagar') || href.includes('pay.kiwify') || 
+                href.includes('pushinpay')) {
+              
+              if (window.utmify && window.utmify.pixel) {
+                window.utmify.pixel.track('ClickButton', {
+                  buttonText: text,
+                  buttonUrl: href,
+                  pageUrl: window.normalizedUrl,
+                  timestamp: new Date().toISOString()
+                });
+              }
+            }
+          }
+        });
+        
+        // Rastrear scroll depth
+        let maxScrollDepth = 0;
+        window.addEventListener('scroll', function() {
+          const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+          
+          if (scrollDepth > maxScrollDepth) {
+            maxScrollDepth = scrollDepth;
+            
+            // Rastrear marcos importantes de scroll
+            if ([25, 50, 75, 90].includes(scrollDepth)) {
+              if (window.utmify && window.utmify.pixel) {
+                window.utmify.pixel.track('ScrollDepth', {
+                  depth: scrollDepth,
+                  pageUrl: window.normalizedUrl,
+                  timestamp: new Date().toISOString()
+                });
+              }
+            }
+          }
+        });
+        
+        // Rastrear tempo na página
+        let startTime = Date.now();
+        window.addEventListener('beforeunload', function() {
+          const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+          
+          if (window.utmify && window.utmify.pixel && timeOnPage > 10) {
+            window.utmify.pixel.track('TimeOnPage', {
+              timeSeconds: timeOnPage,
+              pageUrl: window.normalizedUrl,
+              timestamp: new Date().toISOString()
+            });
+          }
+        });
+        
+        // Rastrear visualizações de vídeo
+        document.addEventListener('click', function(e) {
+          if (e.target.closest('[data-video]') || e.target.closest('.video-thumbnail')) {
+            if (window.utmify && window.utmify.pixel) {
+              window.utmify.pixel.track('VideoView', {
+                pageUrl: window.normalizedUrl,
+                timestamp: new Date().toISOString()
+              });
+            }
+          }
+        });
+        
+        // Load pixel script
+        const pixelScript = document.createElement("script");
+        pixelScript.setAttribute("async", "");
+        pixelScript.setAttribute("defer", "");
+        pixelScript.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(pixelScript);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

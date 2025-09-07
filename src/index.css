@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optimized animations for mobile */
+.scroll-reveal {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.animate-fade-in {
+  opacity: 1;
+}
+
+.gallery-item {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.gallery-item.animate-fade-in {
+  opacity: 1;
+}
+
+/* Mobile-first responsive improvements */
+@media (max-width: 768px) {
+  /* Reduce motion for better performance on mobile */
+  .transition-transform {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .hover\:scale-110:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Optimize touch targets */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve text readability */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Preload critical fonts */
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Merriweather';
+  font-display: swap;
+}
+
+/* Reduce layout shift */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Optimize for mobile scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .transition-all,
+  .transition-opacity,
+  .transition-transform,
+  .transition-colors {
+    transition: none;
+  }
+}
