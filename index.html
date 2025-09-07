@@ -35,5 +35,103 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      // Configuração do pixel com parâmetros máximos
+      fbq('init', 'YOUR_PIXEL_ID'); // Substitua pelo seu Pixel ID
+      
+      // PageView com parâmetros customizados
+      fbq('track', 'PageView', {
+        content_name: 'Farmácia Natural em Casa',
+        content_category: 'Saúde Natural',
+        content_type: 'product',
+        value: 27.00,
+        currency: 'BRL',
+        predicted_ltv: 100.00,
+        num_items: 1,
+        status: 'active',
+        search_string: window.location.search,
+        page_title: document.title,
+        referrer: document.referrer,
+        user_agent: navigator.userAgent,
+        language: navigator.language,
+        screen_resolution: screen.width + 'x' + screen.height,
+        viewport_size: window.innerWidth + 'x' + window.innerHeight,
+        connection_type: navigator.connection ? navigator.connection.effectiveType : 'unknown',
+        device_type: /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop',
+        timestamp: new Date().toISOString(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        url_path: window.location.pathname,
+        url_params: window.location.search,
+        utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+        utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || 'none',
+        utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'none',
+        utm_term: new URLSearchParams(window.location.search).get('utm_term') || 'none',
+        utm_content: new URLSearchParams(window.location.search).get('utm_content') || 'none',
+        fbclid: new URLSearchParams(window.location.search).get('fbclid') || 'none',
+        gclid: new URLSearchParams(window.location.search).get('gclid') || 'none'
+      });
+      
+      // Rastreamento de scroll
+      let scrollTracked = false;
+      window.addEventListener('scroll', function() {
+        if (!scrollTracked && window.scrollY > 100) {
+          fbq('trackCustom', 'ScrollDepth', {
+            scroll_depth: '100px',
+            page_url: window.location.href,
+            timestamp: new Date().toISOString()
+          });
+          scrollTracked = true;
+        }
+      });
+      
+      // Rastreamento de tempo na página
+      setTimeout(function() {
+        fbq('trackCustom', 'TimeOnPage', {
+          time_spent: '30_seconds',
+          page_url: window.location.href,
+          timestamp: new Date().toISOString()
+        });
+      }, 30000);
+      
+      // Rastreamento de cliques em links externos
+      document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'A' && e.target.href) {
+          const isExternal = !e.target.href.includes(window.location.hostname);
+          if (isExternal) {
+            fbq('trackCustom', 'ExternalLinkClick', {
+              link_url: e.target.href,
+              link_text: e.target.textContent,
+              page_url: window.location.href,
+              timestamp: new Date().toISOString()
+            });
+          }
+        }
+      });
+      
+      // Rastreamento de saída da página
+      window.addEventListener('beforeunload', function() {
+        fbq('trackCustom', 'PageExit', {
+          page_url: window.location.href,
+          time_on_page: Date.now() - performance.timing.navigationStart,
+          timestamp: new Date().toISOString()
+        });
+      });
+    </script>
+    <noscript>
+      <img height="1" width="1" style="display:none" 
+           src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
   </body>
 </html>

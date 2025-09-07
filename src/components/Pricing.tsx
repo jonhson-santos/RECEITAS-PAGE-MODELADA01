@@ -10,6 +10,36 @@ const Pricing: React.FC = () => {
     setSelectedPaymentOption(option);
     setShowPaymentModal(true);
     
+    // Facebook Pixel - InitiateCheckout
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'InitiateCheckout', {
+        content_name: option === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+        content_category: 'Saúde Natural',
+        content_type: 'product',
+        content_ids: [option === 'standard' ? 'FARM_STANDARD' : 'FARM_PREMIUM'],
+        value: option === 'standard' ? 9.99 : 27.00,
+        currency: 'BRL',
+        num_items: 1,
+        predicted_ltv: option === 'standard' ? 50.00 : 100.00,
+        checkout_step: 1,
+        payment_method: 'unknown',
+        product_catalog_id: 'farmacia_natural',
+        custom_data: {
+          package_type: option,
+          discount_percentage: option === 'standard' ? 90 : 86,
+          original_price: option === 'standard' ? 97.00 : 197.00,
+          savings: option === 'standard' ? 87.01 : 170.00,
+          page_url: window.location.href,
+          user_agent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          referrer: document.referrer,
+          utm_source: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
+          utm_medium: new URLSearchParams(window.location.search).get('utm_medium') || 'none',
+          utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || 'none'
+        }
+      });
+    }
+    
     // Scroll to modal with animation
     setTimeout(() => {
       const modal = document.getElementById('payment-modal');
