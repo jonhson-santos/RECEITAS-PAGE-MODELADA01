@@ -40,9 +40,9 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       // UTMify Pixel - Verificação de ambiente
-      const isDevelopment = window.location.hostname.includes('localhost') || 
-                           window.location.hostname.includes('127.0.0.1') || 
-                           window.location.hostname.includes('[::1]') ||
+      const isDevelopment = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1' || 
+                           window.location.hostname === '[::1]' ||
                            window.location.port === '5173' ||
                            window.location.port === '3000' ||
                            window.location.port === '8080';
