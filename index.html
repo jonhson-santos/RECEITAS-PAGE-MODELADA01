@@ -39,6 +39,23 @@
       (function() {
         'use strict';
         
+        // Verificação explícita e imediata para desenvolvimento
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          console.log('UTMify: Modo desenvolvimento ativo - pixel bloqueado');
+          
+          // Mock do objeto utmify
+          window.utmify = {
+            pixel: {
+              track: function(eventName, data) {
+                console.log('UTMify Mock:', eventName, data);
+              }
+            }
+          };
+          
+          // Impedir qualquer execução adicional
+          return;
+        }
+        
         // Detectar ambiente de desenvolvimento
         const isDevelopment = window.location.hostname === 'localhost' || 
                              window.location.hostname === '127.0.0.1' ||
