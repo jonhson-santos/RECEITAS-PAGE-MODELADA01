@@ -57,7 +57,6 @@ const RecipeVideos: React.FC = () => {
               <div 
                 key={video.id} 
                 className="group cursor-pointer" 
-                data-video="true"
                 onClick={() => {
                   setSelectedVideo(video.videoUrl);
                 }}

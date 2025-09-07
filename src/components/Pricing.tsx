@@ -289,8 +289,6 @@ const Pricing: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
-                  onClick={() => {
-                  }}
                 >
                   💳 Quero Minhas Receitas - Pagar no Cartão
                 </a>
@@ -300,8 +298,6 @@ const Pricing: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
-                  onClick={() => {
-                  }}
                 >
                   📱 Quero Minhas Receitas - Pagar no PIX
                 </a>
