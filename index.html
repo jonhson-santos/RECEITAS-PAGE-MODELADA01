@@ -35,41 +35,16 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Implementação limpa e definitiva
+      // UTMify Pixel - Lógica simplificada e consolidada
       (function() {
         'use strict';
         
-        // Verificação explícita e imediata para desenvolvimento
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-          console.log('UTMify: Modo desenvolvimento ativo - pixel bloqueado');
-          
-          // Mock do objeto utmify
-          window.utmify = {
-            pixel: {
-              track: function(eventName, data) {
-                console.log('UTMify Mock:', eventName, data);
-              }
-            }
-          };
-          
-          // Impedir qualquer execução adicional
-          return;
-        }
-        
-        // Detectar ambiente de desenvolvimento
+        // Verificação única e clara no início - previne carregamento em desenvolvimento
         const isDevelopment = window.location.hostname === 'localhost' || 
-                             window.location.hostname === '127.0.0.1' ||
-                             window.location.hostname.startsWith('192.168.') ||
-                             window.location.hostname.startsWith('10.') ||
-                             (window.location.hostname.startsWith('172.') && 
-                              parseInt(window.location.hostname.split('.')[1]) >= 16 && 
-                              parseInt(window.location.hostname.split('.')[1]) <= 31);
+                             window.location.hostname === '127.0.0.1';
         
         if (isDevelopment) {
-          // DESENVOLVIMENTO - Mock silencioso
-          console.log('UTMify: Modo desenvolvimento ativo');
-          
-          // Mock do objeto utmify (sem interceptar fetch global)
+          // Mock do pixel para desenvolvimento
           window.utmify = {
             pixel: {
               track: function(eventName, data) {
@@ -78,10 +53,8 @@
             }
           };
           
-          // Não carregar script em desenvolvimento
+          // Impedir carregamento do script externo
           return;
-        } else {
-          // PRODUÇÃO - Carregar pixel UTMify
           window.pixelId = "68ba7e479f0bdf71d9364f2d";
           
           // Função para normalizar URL
@@ -158,7 +131,6 @@
               console.warn('UTMify: Erro no rastreamento de clique', error);
             }
           });
-        }
         
       })();
     </script>
