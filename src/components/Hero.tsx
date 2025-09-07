@@ -33,22 +33,6 @@ const Hero: React.FC = () => {
   const handleScrollToNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     
-    // Facebook Pixel - Lead
-    if (typeof window !== 'undefined' && (window as any).fbq) {
-      (window as any).fbq('track', 'Lead', {
-        content_name: 'Ver Como Funciona',
-        content_category: 'Interesse',
-        value: 0,
-        currency: 'BRL',
-        custom_data: {
-          button_text: 'Ver Como Funciona',
-          section: 'hero',
-          page_url: window.location.href,
-          timestamp: new Date().toISOString()
-        }
-      });
-    }
-    
     const nextSection = document.getElementById('conhecimento');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
