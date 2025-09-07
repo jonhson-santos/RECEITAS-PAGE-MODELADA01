@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 
 function App() {
   useEffect(() => {
+    // Clean scroll reveal implementation
     const handleScroll = () => {
       const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
       
@@ -22,21 +23,26 @@ function App() {
         const elementTop = element.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
         
-        if (elementTop < windowHeight * 0.9) {
+        if (elementTop < windowHeight * 0.85) {
           element.classList.add('animate-fade-in');
         }
       });
     };
     
-    handleScroll(); // Initial check for elements in viewport
-    window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Cleanup
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="font-sans">
+    <div className="min-h-screen bg-white font-sans antialiased">
       <Header />
-      <main className="pt-16">
+      <main>
         <Hero />
         <KnowledgeSection />
         <NaturalRemediesList />

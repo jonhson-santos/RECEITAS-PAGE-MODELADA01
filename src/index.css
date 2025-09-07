@@ -2,47 +2,151 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optimized animations for mobile */
-.scroll-reveal {
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+/* Clean base styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Clean animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
-  opacity: 1;
+  animation: fadeIn 0.6s ease-out forwards;
 }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.scroll-reveal.animate-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Clean gallery animations */
 .gallery-item {
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
 }
 
 .gallery-item.animate-fade-in {
   opacity: 1;
+  transform: translateY(0);
 }
 
-/* Mobile-first responsive improvements */
+.knowledge-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.knowledge-item.animate-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.science-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.science-item.animate-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive improvements */
 @media (max-width: 768px) {
-  /* Reduce motion for better performance on mobile */
-  .transition-transform {
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .hover\:scale-110:hover {
-    transform: scale(1.05);
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   
   /* Optimize touch targets */
-  button, a {
+  button, 
+  a[role="button"],
+  .btn {
     min-height: 44px;
     min-width: 44px;
   }
   
-  /* Improve text readability */
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Improve text readability on mobile */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
   }
+  
+  p {
+    line-height: 1.6;
+  }
+}
+
+/* Clean modal styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 1rem;
+  max-width: 28rem;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Clean video styles */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  border-radius: 0.75rem;
+}
+
+.video-container iframe,
+.video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* Preload critical fonts */
@@ -56,26 +160,33 @@
   font-display: swap;
 }
 
-/* Reduce layout shift */
-img {
-  height: auto;
-  max-width: 100%;
-}
-
-/* Optimize for mobile scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
+/* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
   
-  .transition-all,
-  .transition-opacity,
-  .transition-transform,
-  .transition-colors {
-    transition: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-fade-in,
+  .scroll-reveal,
+  .gallery-item,
+  .knowledge-item,
+  .science-item {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Clean print styles */
+@media print {
+  .no-print {
+    display: none !important;
   }
 }
