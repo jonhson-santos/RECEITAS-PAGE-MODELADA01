@@ -35,21 +35,34 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Só carrega em produção (não em localhost)
-      if (window.location.hostname !== 'localhost' && 
-          window.location.hostname !== '127.0.0.1' && 
-          !window.location.hostname.match(/^192\.168\.\d{1,3}\.\d{1,3}$/)) {
+      // UTMify Pixel - Verificação imediata para localhost
+      if (window.location.hostname === 'localhost' || 
+          window.location.hostname === '127.0.0.1' || 
+          window.location.hostname === '[::1]' ||
+          window.location.hostname.match(/^192\.168\.\d{1,3}\.\d{1,3}$/)) {
+        console.log('UTMify pixel não carregado em localhost - apenas em produção');
         
+        // Criar mock do UTMify para desenvolvimento
+        window.utmify = {
+          pixel: {
+            track: function(eventName, data) {
+              console.log('UTMify Mock - Event:', eventName, data);
+            }
+          }
+        };
+      } else {
         window.pixelId = "68ba7e479f0bdf71d9364f2d";
         
         // Função para normalizar a URL removendo parâmetros aleatórios da Vercel
         function normalizeUrl() {
           const url = window.location.href;
-          const baseUrl = url.split('?')[0];
+          const baseUrl = url.split('?')[0]; // Remove query parameters
           const pathParts = baseUrl.split('/');
           
+          // Remove parâmetros aleatórios da Vercel (geralmente são strings curtas no final)
           if (pathParts.length > 3) {
             const lastPart = pathParts[pathParts.length - 1];
+            // Se o último segmento parece ser um parâmetro da Vercel (curto e aleatório)
             if (lastPart.length < 10 && /^[a-zA-Z0-9]+$/.test(lastPart) && lastPart !== 'index') {
               pathParts.pop();
             }
@@ -58,18 +71,21 @@
           return pathParts.join('/');
         }
         
+        // Configurar URL normalizada para o pixel
         window.normalizedUrl = normalizeUrl();
         
-        // Carregar o script do pixel
+        // Carregar o script do pixel apenas em produção
         var a = document.createElement("script");
         a.setAttribute("async", "");
         a.setAttribute("defer", "");
         a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
         document.head.appendChild(a);
         
-        // Rastrear eventos quando carregado
+        // Rastrear eventos importantes quando o pixel estiver carregado
         window.addEventListener('load', function() {
+          // Aguardar o pixel carregar
           setTimeout(function() {
+            // Rastrear visualização de página com URL normalizada
             if (window.utmify && window.utmify.pixel) {
               window.utmify.pixel.track('PageView', {
                 url: window.normalizedUrl,
@@ -81,13 +97,14 @@
           }, 1000);
         });
         
-        // Rastrear cliques
+        // Rastrear cliques em botões importantes
         document.addEventListener('click', function(e) {
           const target = e.target.closest('a, button');
           if (target) {
             const text = target.textContent.trim();
             const href = target.href || '';
             
+            // Rastrear cliques em CTAs importantes
             if (text.includes('Quero') || text.includes('Garantir') || text.includes('Acesso') || 
                 text.includes('Liberar') || text.includes('Pagar') || href.includes('pay.kiwify') || 
                 href.includes('pushinpay') || href.includes('remarketing')) {
@@ -103,9 +120,28 @@
             }
           }
         });
-      } else {
-        console.log('UTMify pixel não carregado em localhost - apenas em produção');
       }
+      
+      // Rastrear scroll depth (funciona tanto em dev quanto prod)
+      let maxScrollDepth = 0;
+      window.addEventListener('scroll', function() {
+        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        
+        if (scrollDepth > maxScrollDepth) {
+          maxScrollDepth = scrollDepth;
+          
+          // Rastrear marcos importantes de scroll
+          if ([25, 50, 75, 90].includes(scrollDepth)) {
+            if (window.utmify && window.utmify.pixel) {
+              window.utmify.pixel.track('ScrollDepth', {
+                depth: scrollDepth,
+                pageUrl: window.normalizedUrl || window.location.href,
+                timestamp: new Date().toISOString()
+              });
+            }
+          }
+        }
+      });
     </script>
   </head>
   <body>
