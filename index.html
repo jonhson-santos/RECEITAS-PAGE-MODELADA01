@@ -35,65 +35,36 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Mock completo para desenvolvimento
-      function isLocalEnvironment() {
-        const hostname = window.location.hostname;
-        const port = window.location.port;
-        
-        return hostname === 'localhost' || 
-               hostname === '127.0.0.1' || 
-               hostname === '[::1]' ||
-               hostname === '0.0.0.0' ||
-               port === '5173' ||
-               /^192\.168\.\d{1,3}\.\d{1,3}$/.test(hostname);
-      }
-      
-      if (isLocalEnvironment()) {
+      // UTMify Pixel - Só carrega em produção (não em localhost)
+      if (window.location.hostname === 'localhost' || window.location.port === '5173') {
         console.log('UTMify pixel não carregado em localhost - apenas em produção');
-        
-        // Mock completo do UTMify para evitar erros
-        window.pixelId = "68ba7e479f0bdf71d9364f2d";
-        window.normalizedUrl = window.location.href;
-        
-        // Mock do objeto utmify
-        window.utmify = {
-          pixel: {
-            track: function(eventName, data) {
-              console.log('UTMify Mock - Event:', eventName, data);
-              return Promise.resolve();
-            }
-          }
-        };
         
         // Mock das funções que o pixel usa
         const originalFetch = window.fetch;
         window.fetch = function(...args) {
-          // Se for uma chamada do UTMify, retorna mock
-          if (args[0] && typeof args[0] === 'string' && args[0].includes('utmify')) {
-            console.log('UTMify Mock - Fetch intercepted:', args[0]);
-            return Promise.resolve({
-              ok: true,
-              json: () => Promise.resolve({ success: true }),
-              text: () => Promise.resolve('OK')
-            });
-          }
-          // Para outras chamadas, usa o fetch original
-          return originalFetch.apply(this, args);
+          // Em desenvolvimento, intercepta TODAS as chamadas fetch
+          console.log('Development Mock - Fetch intercepted:', args[0]);
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({ success: true }),
+            text: () => Promise.resolve('OK'),
+            blob: () => Promise.resolve(new Blob()),
+            arrayBuffer: () => Promise.resolve(new ArrayBuffer(0))
+          });
         };
-        
       } else {
+        
         window.pixelId = "68ba7e479f0bdf71d9364f2d";
         
         // Função para normalizar a URL removendo parâmetros aleatórios da Vercel
         function normalizeUrl() {
           const url = window.location.href;
-          const baseUrl = url.split('?')[0]; // Remove query parameters
+          const baseUrl = url.split('?')[0];
           const pathParts = baseUrl.split('/');
           
-          // Remove parâmetros aleatórios da Vercel (geralmente são strings curtas no final)
           if (pathParts.length > 3) {
             const lastPart = pathParts[pathParts.length - 1];
-            // Se o último segmento parece ser um parâmetro da Vercel (curto e aleatório)
             if (lastPart.length < 10 && /^[a-zA-Z0-9]+$/.test(lastPart) && lastPart !== 'index') {
               pathParts.pop();
             }
@@ -102,21 +73,18 @@
           return pathParts.join('/');
         }
         
-        // Configurar URL normalizada para o pixel
         window.normalizedUrl = normalizeUrl();
         
-        // Carregar o script do pixel apenas em produção
+        // Carregar o script do pixel
         var a = document.createElement("script");
         a.setAttribute("async", "");
         a.setAttribute("defer", "");
         a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
         document.head.appendChild(a);
         
-        // Rastrear eventos importantes quando o pixel estiver carregado
+        // Rastrear eventos quando carregado
         window.addEventListener('load', function() {
-          // Aguardar o pixel carregar
           setTimeout(function() {
-            // Rastrear visualização de página com URL normalizada
             if (window.utmify && window.utmify.pixel) {
               window.utmify.pixel.track('PageView', {
                 url: window.normalizedUrl,
@@ -128,14 +96,13 @@
           }, 1000);
         });
         
-        // Rastrear cliques em botões importantes
+        // Rastrear cliques
         document.addEventListener('click', function(e) {
           const target = e.target.closest('a, button');
           if (target) {
             const text = target.textContent.trim();
             const href = target.href || '';
             
-            // Rastrear cliques em CTAs importantes
             if (text.includes('Quero') || text.includes('Garantir') || text.includes('Acesso') || 
                 text.includes('Liberar') || text.includes('Pagar') || href.includes('pay.kiwify') || 
                 href.includes('pushinpay') || href.includes('remarketing')) {
@@ -152,27 +119,6 @@
           }
         });
       }
-      
-      // Rastrear scroll depth (funciona tanto em dev quanto prod)
-      let maxScrollDepth = 0;
-      window.addEventListener('scroll', function() {
-        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        
-        if (scrollDepth > maxScrollDepth) {
-          maxScrollDepth = scrollDepth;
-          
-          // Rastrear marcos importantes de scroll
-          if ([25, 50, 75, 90].includes(scrollDepth)) {
-            if (window.utmify && window.utmify.pixel) {
-              window.utmify.pixel.track('ScrollDepth', {
-                depth: scrollDepth,
-                pageUrl: window.normalizedUrl || window.location.href,
-                timestamp: new Date().toISOString()
-              });
-            }
-          }
-        }
-      });
     </script>
   </head>
   <body>
