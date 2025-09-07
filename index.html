@@ -35,37 +35,36 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Verificação simples para desenvolvimento
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        // DESENVOLVIMENTO - Mock completo
-        console.log('UTMify pixel não carregado em desenvolvimento - apenas em produção');
+      // UTMify Pixel - Implementação limpa e definitiva
+      (function() {
+        'use strict';
         
-        // Mock do fetch para interceptar todas as chamadas
-        const originalFetch = window.fetch;
-        window.fetch = function(...args) {
-          console.log('Development Mock - Fetch intercepted:', args[0]);
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve({ success: true }),
-            text: () => Promise.resolve('OK'),
-            blob: () => Promise.resolve(new Blob()),
-            arrayBuffer: () => Promise.resolve(new ArrayBuffer(0))
-          });
-        };
+        // Detectar ambiente de desenvolvimento
+        const isDevelopment = window.location.hostname === 'localhost' || 
+                             window.location.hostname === '127.0.0.1' || 
+                             window.location.port === '5173';
         
-        // Mock do objeto utmify
-        window.utmify = {
-          pixel: {
-            track: function(eventName, data) {
-              console.log('UTMify Mock - Event:', eventName, data);
+        if (isDevelopment) {
+          // DESENVOLVIMENTO - Mock silencioso
+          console.log('UTMify: Modo desenvolvimento ativo');
+          
+          // Mock do objeto utmify (sem interceptar fetch global)
+          window.utmify = {
+            pixel: {
+              track: function(eventName, data) {
+                console.log('UTMify Mock:', eventName, data);
+              }
             }
-          }
-        };
-      } else {
+          };
+          
+          // Não carregar script em desenvolvimento
+          return;
+        }
+        
         // PRODUÇÃO - Carregar pixel UTMify
         window.pixelId = "68ba7e479f0bdf71d9364f2d";
         
-        // Função para normalizar a URL removendo parâmetros aleatórios da Vercel
+        // Função para normalizar URL
         function normalizeUrl() {
           const url = window.location.href;
           const baseUrl = url.split('?')[0];
@@ -83,31 +82,42 @@
         
         window.normalizedUrl = normalizeUrl();
         
-        // Carregar o script do pixel
-        var a = document.createElement("script");
-        a.setAttribute("async", "");
-        a.setAttribute("defer", "");
-        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-        document.head.appendChild(a);
+        // Carregar script do pixel apenas uma vez
+        if (!document.querySelector('script[src*="utmify"]')) {
+          const script = document.createElement("script");
+          script.async = true;
+          script.defer = true;
+          script.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+          script.onerror = function() {
+            console.warn('UTMify: Falha ao carregar pixel');
+          };
+          document.head.appendChild(script);
+        }
         
-        // Rastrear eventos quando carregado
+        // Rastrear PageView quando carregado
         window.addEventListener('load', function() {
           setTimeout(function() {
             if (window.utmify && window.utmify.pixel) {
-              window.utmify.pixel.track('PageView', {
-                url: window.normalizedUrl,
-                title: document.title,
-                referrer: document.referrer,
-                timestamp: new Date().toISOString()
-              });
+              try {
+                window.utmify.pixel.track('PageView', {
+                  url: window.normalizedUrl,
+                  title: document.title,
+                  referrer: document.referrer,
+                  timestamp: new Date().toISOString()
+                });
+              } catch (error) {
+                console.warn('UTMify: Erro no PageView', error);
+              }
             }
           }, 1000);
         });
         
-        // Rastrear cliques
+        // Rastrear cliques com proteção contra erros
         document.addEventListener('click', function(e) {
-          const target = e.target.closest('a, button');
-          if (target) {
+          try {
+            const target = e.target.closest('a, button');
+            if (!target) return;
+            
             const text = target.textContent.trim();
             const href = target.href || '';
             
@@ -124,9 +134,12 @@
                 });
               }
             }
+          } catch (error) {
+            console.warn('UTMify: Erro no rastreamento de clique', error);
           }
         });
-      }
+        
+      })();
     </script>
   </head>
   <body>
