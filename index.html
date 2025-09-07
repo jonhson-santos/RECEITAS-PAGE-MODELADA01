@@ -55,8 +55,8 @@
           
           // Impedir carregamento do script externo
           return;
-        }
-        
+        } else {
+          // Código UTMify apenas para produção
           window.pixelId = "68ba7e479f0bdf71d9364f2d";
           
           // Função para normalizar URL
@@ -133,6 +133,7 @@
               console.warn('UTMify: Erro no rastreamento de clique', error);
             }
           });
+        }
         
       })();
     </script>
