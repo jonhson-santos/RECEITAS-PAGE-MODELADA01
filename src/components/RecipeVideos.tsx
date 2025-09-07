@@ -57,8 +57,18 @@ const RecipeVideos: React.FC = () => {
               <div 
                 key={video.id} 
                 className="group cursor-pointer" 
+                data-video="true"
                 onClick={() => {
                   setSelectedVideo(video.videoUrl);
+                  // Rastrear clique no vídeo
+                  if (window.utmify && window.utmify.pixel) {
+                    window.utmify.pixel.track('VideoClick', {
+                      videoTitle: video.title,
+                      videoId: video.id,
+                      pageUrl: window.location.href,
+                      timestamp: new Date().toISOString()
+                    });
+                  }
                 }}
               >
                 <div className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">

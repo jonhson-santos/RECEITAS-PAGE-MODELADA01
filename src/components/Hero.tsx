@@ -32,7 +32,6 @@ const Hero: React.FC = () => {
 
   const handleScrollToNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
     const nextSection = document.getElementById('conhecimento');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
