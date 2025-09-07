@@ -40,9 +40,8 @@
         'use strict';
         
         // Detectar ambiente de desenvolvimento
-        const isDevelopment = window.location.hostname === 'localhost' || 
-                             window.location.hostname === '127.0.0.1' || 
-                             window.location.port === '5173';
+        const isDevelopment = window.location.origin.includes('localhost:5173') || 
+                             window.location.origin.includes('127.0.0.1:5173');
         
         if (isDevelopment) {
           // DESENVOLVIMENTO - Mock silencioso
