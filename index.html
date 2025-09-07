@@ -36,9 +36,9 @@
     </script>
     <script>
       // UTMify Pixel - Verificação simples para desenvolvimento
-      if (window.location.hostname === 'localhost') {
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         // DESENVOLVIMENTO - Mock completo
-        console.log('UTMify pixel não carregado em localhost - apenas em produção');
+        console.log('UTMify pixel não carregado em desenvolvimento - apenas em produção');
         
         // Mock do fetch para interceptar todas as chamadas
         const originalFetch = window.fetch;
