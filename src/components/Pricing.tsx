@@ -11,15 +11,6 @@ const Pricing: React.FC = () => {
     setShowPaymentModal(true);
     
     // Rastrear abertura do modal de pagamento
-    if (window.utmify && window.utmify.pixel) {
-      window.utmify.pixel.track('InitiateCheckout', {
-        packageType: option,
-        value: option === 'standard' ? 9.99 : 27.00,
-        currency: 'BRL',
-        pageUrl: window.location.href,
-        timestamp: new Date().toISOString()
-      });
-    }
     
     // Scroll to modal with animation
     setTimeout(() => {
@@ -299,17 +290,6 @@ const Pricing: React.FC = () => {
                   rel="noopener noreferrer"
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
                   onClick={() => {
-                    // Rastrear clique no pagamento com cartão
-                    if (window.utmify && window.utmify.pixel) {
-                      window.utmify.pixel.track('Purchase', {
-                        packageType: selectedPaymentOption,
-                        paymentMethod: 'credit_card',
-                        value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
-                        currency: 'BRL',
-                        pageUrl: window.location.href,
-                        timestamp: new Date().toISOString()
-                      });
-                    }
                   }}
                 >
                   💳 Quero Minhas Receitas - Pagar no Cartão
@@ -321,17 +301,6 @@ const Pricing: React.FC = () => {
                   rel="noopener noreferrer"
                   className="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
                   onClick={() => {
-                    // Rastrear clique no pagamento com PIX
-                    if (window.utmify && window.utmify.pixel) {
-                      window.utmify.pixel.track('Purchase', {
-                        packageType: selectedPaymentOption,
-                        paymentMethod: 'pix',
-                        value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
-                        currency: 'BRL',
-                        pageUrl: window.location.href,
-                        timestamp: new Date().toISOString()
-                      });
-                    }
                   }}
                 >
                   📱 Quero Minhas Receitas - Pagar no PIX
