@@ -38,26 +38,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      // UTMify Pixel - Verificação de ambiente
-      const isDevelopment = window.location.hostname === 'localhost' || 
-                           window.location.hostname === '127.0.0.1' || 
-                           window.location.hostname === '[::1]' ||
-                           window.location.port === '5173' ||
-                           window.location.port === '3000' ||
-                           window.location.port === '8080';
-      
-      if (!isDevelopment) {
-        window.pixelId = "68ba7e479f0bdf71d9364f2d";
-        var a = document.createElement("script");
-        a.setAttribute("async", "");
-        a.setAttribute("defer", "");
-        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-        document.head.appendChild(a);
-      } else {
-        // Mock para desenvolvimento
-        console.log('UTMify Pixel: Modo desenvolvimento detectado - script não carregado');
-      }
-    </script>
   </body>
 </html>
