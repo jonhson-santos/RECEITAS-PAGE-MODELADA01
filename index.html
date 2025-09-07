@@ -35,10 +35,10 @@
       setBackRedirect(link);
     </script>
     <script>
-      // UTMify Pixel - Verificação simples para desenvolvimento
-      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.port === '5173') {
+      // UTMify Pixel - Verificação robusta para desenvolvimento
+      if (window.location.port === '5173') {
         // DESENVOLVIMENTO - Mock completo
-        console.log('UTMify pixel não carregado em localhost - apenas em produção');
+        console.log('UTMify pixel não carregado em desenvolvimento - apenas em produção');
         
         // Mock do fetch para interceptar todas as chamadas
         const originalFetch = window.fetch;
@@ -127,6 +127,27 @@
           }
         });
       }
+      
+      // Rastrear scroll depth (funciona tanto em dev quanto prod)
+      let maxScrollDepth = 0;
+      window.addEventListener('scroll', function() {
+        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        
+        if (scrollDepth > maxScrollDepth) {
+          maxScrollDepth = scrollDepth;
+          
+          // Rastrear marcos importantes de scroll
+          if ([25, 50, 75, 90].includes(scrollDepth)) {
+            if (window.utmify && window.utmify.pixel) {
+              window.utmify.pixel.track('ScrollDepth', {
+                depth: scrollDepth,
+                pageUrl: window.normalizedUrl || window.location.href,
+                timestamp: new Date().toISOString()
+              });
+            }
+          }
+        }
+      });
     </script>
   </head>
   <body>
