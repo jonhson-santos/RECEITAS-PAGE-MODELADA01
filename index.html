@@ -26,14 +26,6 @@
 
         window.addEventListener('popstate', () => {
           console.log('onpopstate', urlBackRedirect);
-          setTimeout(() => {
-            location.href = urlBackRedirect;
-          }, 1);
-        });
-      }
-
-      setBackRedirect(link);
-    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -10,20 +10,6 @@ const Pricing: React.FC = () => {
     setSelectedPaymentOption(option);
     setShowPaymentModal(true);
     
-    // UTMify tracking
-    if (typeof window !== 'undefined' && window.utmify) {
-      window.utmify.track('InitiateCheckout', {
-        content_name: option === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
-        content_category: 'ebook',
-        value: option === 'standard' ? 9.99 : 27.00,
-        currency: 'BRL',
-        content_ids: [option],
-        num_items: 1
-      });
-    }
-    
-    // Rastrear abertura do modal de pagamento
-    
     // Scroll to modal with animation
     setTimeout(() => {
       const modal = document.getElementById('payment-modal');
