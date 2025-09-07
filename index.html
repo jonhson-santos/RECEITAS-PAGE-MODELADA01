@@ -34,43 +34,57 @@
 
       setBackRedirect(link);
     </script>
-    <script>
-      // UTMify Pixel - Funciona independente da URL da Vercel
-      window.pixelId = "68ba7e479f0bdf71d9364f2d";
-      
-      // Função para normalizar a URL removendo parâmetros aleatórios da Vercel
-      function normalizeUrl() {
-        const url = window.location.href;
-        const baseUrl = url.split('?')[0]; // Remove query parameters
-        const pathParts = baseUrl.split('/');
+    <script type="module">
+      // Only load UTMify scripts in production
+      if (import.meta.env.MODE === 'production') {
+        // Load UTMs script
+        const utmsScript = document.createElement("script");
+        utmsScript.setAttribute("src", "https://cdn.utmify.com.br/scripts/utms/latest.js");
+        utmsScript.setAttribute("data-utmify-prevent-xcod-sck", "");
+        utmsScript.setAttribute("data-utmify-prevent-subids", "");
+        utmsScript.setAttribute("async", "");
+        utmsScript.setAttribute("defer", "");
+        document.head.appendChild(utmsScript);
         
-        // Remove parâmetros aleatórios da Vercel (geralmente são strings curtas no final)
-        if (pathParts.length > 3) {
-          const lastPart = pathParts[pathParts.length - 1];
-          // Se o último segmento parece ser um parâmetro da Vercel (curto e aleatório)
-          if (lastPart.length < 10 && /^[a-zA-Z0-9]+$/.test(lastPart) && lastPart !== 'index') {
-            pathParts.pop();
+        window.pixelId = "68ba7e479f0bdf71d9364f2d";
+        
+        // Configuração para capturar todas as métricas
+        window.pixelConfig = {
+          trackPageView: true,
+          trackClicks: true,
+          trackScrollDepth: true,
+          trackTimeOnPage: true,
+          trackFormSubmissions: true,
+          trackButtonClicks: true,
+          trackVideoViews: true,
+          trackDownloads: true,
+          trackOutboundLinks: true,
+          trackCustomEvents: true
+        };
+        
+        // Função para normalizar a URL removendo parâmetros da Vercel
+        function normalizeUrl() {
+          const url = window.location.href;
+          const baseUrl = url.split('?')[0]; // Remove query parameters
+          const pathParts = baseUrl.split('/');
+          
+          // Remove parâmetros aleatórios da Vercel (geralmente são strings curtas no final)
+          if (pathParts.length > 3) {
+            const lastPart = pathParts[pathParts.length - 1];
+            // Se o último segmento parece ser um parâmetro da Vercel (curto e aleatório)
+            if (lastPart.length < 10 && /^[a-zA-Z0-9]+$/.test(lastPart) && lastPart !== 'index') {
+              pathParts.pop();
+            }
           }
+          
+          return pathParts.join('/');
         }
         
-        return pathParts.join('/');
-      }
-      
-      // Configurar URL normalizada para o pixel
-      window.normalizedUrl = normalizeUrl();
-      
-      // Carregar o script do pixel
-      var a = document.createElement("script");
-      a.setAttribute("async", "");
-      a.setAttribute("defer", "");
-      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-      document.head.appendChild(a);
-      
-      // Rastrear eventos importantes quando o pixel estiver carregado
-      window.addEventListener('load', function() {
-        // Aguardar o pixel carregar
-        setTimeout(function() {
-          // Rastrear visualização de página com URL normalizada
+        // Configurar URL normalizada para o pixel
+        window.normalizedUrl = normalizeUrl();
+        
+        // Rastrear visualização de página com URL normalizada
+        window.addEventListener('load', function() {
           if (window.utmify && window.utmify.pixel) {
             window.utmify.pixel.track('PageView', {
               url: window.normalizedUrl,
@@ -79,53 +93,86 @@
               timestamp: new Date().toISOString()
             });
           }
-        }, 1000);
-      });
-      
-      // Rastrear cliques em botões importantes
-      document.addEventListener('click', function(e) {
-        const target = e.target.closest('a, button');
-        if (target) {
-          const text = target.textContent.trim();
-          const href = target.href || '';
-          
-          // Rastrear cliques em CTAs importantes
-          if (text.includes('Quero') || text.includes('Garantir') || text.includes('Acesso') || 
-              text.includes('Liberar') || text.includes('Pagar') || href.includes('pay.kiwify') || 
-              href.includes('pushinpay') || href.includes('remarketing')) {
-            
-            if (window.utmify && window.utmify.pixel) {
-              window.utmify.pixel.track('ClickButton', {
-                buttonText: text,
-                buttonUrl: href,
-                pageUrl: window.normalizedUrl,
-                timestamp: new Date().toISOString()
-              });
-            }
-          }
-        }
-      });
-      
-      // Rastrear scroll depth
-      let maxScrollDepth = 0;
-      window.addEventListener('scroll', function() {
-        const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        });
         
-        if (scrollDepth > maxScrollDepth) {
-          maxScrollDepth = scrollDepth;
+        // Rastrear cliques em botões e links importantes
+        document.addEventListener('click', function(e) {
+          const target = e.target.closest('a, button');
+          if (target) {
+            const text = target.textContent.trim();
+            const href = target.href || '';
+            
+            // Rastrear cliques em CTAs importantes
+            if (text.includes('Quero') || text.includes('Garantir') || text.includes('Acesso') || 
+                text.includes('Comprar') || text.includes('Pagar') || href.includes('pay.kiwify') || 
+                href.includes('pushinpay')) {
+              
+              if (window.utmify && window.utmify.pixel) {
+                window.utmify.pixel.track('ClickButton', {
+                  buttonText: text,
+                  buttonUrl: href,
+                  pageUrl: window.normalizedUrl,
+                  timestamp: new Date().toISOString()
+                });
+              }
+            }
+          }
+        });
+        
+        // Rastrear scroll depth
+        let maxScrollDepth = 0;
+        window.addEventListener('scroll', function() {
+          const scrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
           
-          // Rastrear marcos importantes de scroll
-          if ([25, 50, 75, 90].includes(scrollDepth)) {
+          if (scrollDepth > maxScrollDepth) {
+            maxScrollDepth = scrollDepth;
+            
+            // Rastrear marcos importantes de scroll
+            if ([25, 50, 75, 90].includes(scrollDepth)) {
+              if (window.utmify && window.utmify.pixel) {
+                window.utmify.pixel.track('ScrollDepth', {
+                  depth: scrollDepth,
+                  pageUrl: window.normalizedUrl,
+                  timestamp: new Date().toISOString()
+                });
+              }
+            }
+          }
+        });
+        
+        // Rastrear tempo na página
+        let startTime = Date.now();
+        window.addEventListener('beforeunload', function() {
+          const timeOnPage = Math.round((Date.now() - startTime) / 1000);
+          
+          if (window.utmify && window.utmify.pixel && timeOnPage > 10) {
+            window.utmify.pixel.track('TimeOnPage', {
+              timeSeconds: timeOnPage,
+              pageUrl: window.normalizedUrl,
+              timestamp: new Date().toISOString()
+            });
+          }
+        });
+        
+        // Rastrear visualizações de vídeo
+        document.addEventListener('click', function(e) {
+          if (e.target.closest('[data-video]') || e.target.closest('.video-thumbnail')) {
             if (window.utmify && window.utmify.pixel) {
-              window.utmify.pixel.track('ScrollDepth', {
-                depth: scrollDepth,
+              window.utmify.pixel.track('VideoView', {
                 pageUrl: window.normalizedUrl,
                 timestamp: new Date().toISOString()
               });
             }
           }
-        }
-      });
+        });
+        
+        // Load pixel script
+        const pixelScript = document.createElement("script");
+        pixelScript.setAttribute("async", "");
+        pixelScript.setAttribute("defer", "");
+        pixelScript.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(pixelScript);
+      }
     </script>
   </head>
   <body>
