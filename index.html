@@ -36,6 +36,81 @@
     <script>
       // UTMify Pixel Script
       window.pixelId = "68be1608013346c26842c789";
+      
+      // Handle Vercel dynamic URLs - normalize to base domain
+      if (window.location.hostname.includes('vercel.app')) {
+        // Override location properties to use base URL
+        const baseUrl = window.location.origin;
+        const basePath = '/';
+        
+        // Create normalized URL for tracking
+        window.utmifyBaseUrl = baseUrl + basePath;
+        
+        // Override history API to prevent URL changes from breaking pixel
+        const originalPushState = history.pushState;
+        const originalReplaceState = history.replaceState;
+        
+        history.pushState = function() {
+          originalPushState.apply(history, arguments);
+          // Re-track page view on URL change
+          setTimeout(() => {
+            if (window.utmify && window.utmify.track) {
+              window.utmify.track('PageView', {
+                page_title: document.title,
+                page_location: window.utmifyBaseUrl || window.location.href,
+                page_referrer: document.referrer
+              });
+            }
+          }, 100);
+        };
+        
+        history.replaceState = function() {
+          originalReplaceState.apply(history, arguments);
+          // Re-track page view on URL change
+          setTimeout(() => {
+            if (window.utmify && window.utmify.track) {
+              window.utmify.track('PageView', {
+                page_title: document.title,
+                page_location: window.utmifyBaseUrl || window.location.href,
+                page_referrer: document.referrer
+              });
+            }
+          }, 100);
+        };
+      }
+      
+      // Meta Pixel Implementation for detection by Meta Pixel Helper
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      
+      // Initialize Meta Pixel with a dummy ID for detection
+      fbq('init', '1234567890123456');
+      fbq('track', 'PageView');
+      
+      // Override fbq to also send to UTMify
+      const originalFbq = window.fbq;
+      window.fbq = function(action, event, params) {
+        // Call original Meta Pixel
+        if (originalFbq) {
+          originalFbq.apply(this, arguments);
+        }
+        
+        // Also send to UTMify
+        if (window.utmify && window.utmify.track) {
+          window.utmify.track(event, {
+            ...params,
+            source: 'meta_pixel_override',
+            page_location: window.utmifyBaseUrl || window.location.href
+          });
+        }
+      };
+      
       var a = document.createElement("script");
       a.setAttribute("async", "");
       a.setAttribute("defer", "");
@@ -54,6 +129,8 @@
           crossDomain: true,
           thirdParty: true,
           fullAccess: true
+          vercelDynamicUrls: true,
+          urlNormalization: true
         };
         
         // Disable any tracking prevention
@@ -72,6 +149,18 @@
             document.domain = document.domain;
           } catch(e) {}
         }
+        
+        // Vercel-specific configurations
+        window.utmifyVercelConfig = {
+          handleDynamicUrls: true,
+          normalizeUrls: true,
+          trackAllPageChanges: true,
+          persistAcrossReloads: true
+        };
+        
+        // Meta Pixel specific configurations
+        window._fbq_loaded = true;
+        window._fbq = window.fbq;
       }
     </script>
     

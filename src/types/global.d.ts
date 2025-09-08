@@ -16,6 +16,9 @@ declare global {
     trackingAllowed?: boolean;
     dataLayer?: any[];
     gtag?: (...args: any[]) => void;
+    fbq?: (...args: any[]) => void;
+    _fbq?: any;
+    _fbq_loaded?: boolean;
   }
 }
 

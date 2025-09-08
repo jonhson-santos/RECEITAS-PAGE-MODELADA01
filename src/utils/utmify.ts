@@ -19,14 +19,32 @@ declare global {
 export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
   try {
     if (typeof window !== 'undefined') {
+      // Use normalized URL for Vercel
+      const trackingUrl = window.utmifyBaseUrl || window.location.href;
+      const enhancedParameters = {
+        ...parameters,
+        page_location: trackingUrl,
+        timestamp: Date.now(),
+        user_agent: navigator.userAgent,
+        screen_resolution: `${screen.width}x${screen.height}`,
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        referrer: document.referrer,
+        is_vercel: window.location.hostname.includes('vercel.app')
+      };
+      
       // Try multiple UTMify methods
       if (window.utmify && window.utmify.track) {
-        window.utmify.track(eventName, parameters);
+        window.utmify.track(eventName, enhancedParameters);
+      }
+      
+      // Also trigger Meta Pixel events for compatibility
+      if (window.fbq) {
+        window.fbq('track', eventName, enhancedParameters);
       }
       
       // Fallback methods
       if (window.pixel && window.pixel.track) {
-        window.pixel.track(eventName, parameters);
+        window.pixel.track(eventName, enhancedParameters);
       }
       
       // Direct pixel tracking
@@ -35,13 +53,13 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
         const params = new URLSearchParams({
           pixel_id: window.pixelId,
           event: eventName,
-          data: JSON.stringify(parameters || {})
+          data: JSON.stringify(enhancedParameters)
         });
         img.src = `https://api.utmify.com.br/track?${params.toString()}`;
       }
       
       // Console log for debugging
-      console.log('UTMify Event:', eventName, parameters);
+      console.log('UTMify Event:', eventName, enhancedParameters);
     }
   } catch (error) {
     console.warn('UTMify tracking error:', error);
@@ -57,7 +75,7 @@ export const trackEvent = (eventName: string, parameters?: Record<string, any>) 
           body: JSON.stringify({
             pixel_id: window.pixelId,
             event: eventName,
-            parameters: parameters || {}
+            parameters: enhancedParameters || {}
           })
         }).catch(() => {});
       }
