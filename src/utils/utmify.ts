@@ -7,6 +7,11 @@ declare global {
     };
     dataLayer?: any[];
     gtag?: (...args: any[]) => void;
+    pixel?: {
+      track: (eventName: string, parameters?: Record<string, any>) => void;
+    };
+    pixelId?: string;
+    utmifyPermissions?: Record<string, any>;
   }
 }
 
@@ -90,25 +95,6 @@ export const initUTMify = (pixelId?: string, config?: Record<string, any>) => {
         fullAccess: true,
         ...config
       };
-    }
-  } catch (error) {
-    console.warn('UTMify initialization error:', error);
-  }
-};
-      window.utmify.track(eventName, parameters);
-    }
-  } catch (error) {
-    console.warn('UTMify tracking error:', error);
-  }
-};
-
-export const initUTMify = (pixelId?: string, config?: Record<string, any>) => {
-  try {
-    if (typeof window !== 'undefined' && window.utmify) {
-      if (pixelId) {
-        window.utmify.setPixelId(pixelId);
-      }
-      window.utmify.init(config);
     }
   } catch (error) {
     console.warn('UTMify initialization error:', error);
