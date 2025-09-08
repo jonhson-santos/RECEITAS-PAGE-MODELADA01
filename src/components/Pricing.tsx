@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Sparkles, Clock, CreditCard, X } from 'lucide-react';
+import { trackEvent } from '../types/global';
 
 const Pricing: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<'standard' | 'premium'>('premium');
@@ -7,6 +8,15 @@ const Pricing: React.FC = () => {
   const [selectedPaymentOption, setSelectedPaymentOption] = useState<'standard' | 'premium' | null>(null);
 
   const handlePurchaseClick = (option: 'standard' | 'premium') => {
+    // Track purchase intent
+    trackEvent('InitiateCheckout', {
+      content_name: option === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+      content_category: 'ebook',
+      value: option === 'standard' ? 9.99 : 27.00,
+      currency: 'BRL',
+      content_ids: [option === 'standard' ? 'standard_package' : 'premium_package']
+    });
+    
     setSelectedPaymentOption(option);
     setShowPaymentModal(true);
 
@@ -28,62 +38,62 @@ const Pricing: React.FC = () => {
     {
       title: "+3.000 Receitas de Garrafadas Medicinais",
       description: "Acesso completo a milhares de receitas naturais",
-      value: "R$ 97,00"
+      value: "R$ 27,00"
     },
     {
       title: "BÔNUS 1 – Supere a Menopausa",
       description: "Guia completo para passar pela menopausa naturalmente",
-      value: "R$ 67,00"
+      value: "R$ 17,00"
     },
     {
       title: "BÔNUS 2 – O Poder dos Óleos Essenciais",
       description: "Como usar óleos essenciais para saúde e bem-estar",
-      value: "R$ 57,00"
+      value: "R$ 7,00"
     },
     {
       title: "BÔNUS 3 – 10 Banhos para Aumentar sua Energia",
       description: "Receitas de banhos energizantes e revitalizantes",
-      value: "R$ 57,00"
+      value: "R$ 7,00"
     },
     {
       title: "BÔNUS 4 – Plano Alimentar Detox",
       description: "Plano completo para desintoxicar seu organismo",
-      value: "R$ 67,00"
+      value: "R$ 7,00"
     },
     {
       title: "BÔNUS 5 – Desafio 7 dias Para Aumentar sua Imunidade",
       description: "Programa intensivo para fortalecer sua imunidade",
-      value: "R$ 77,00"
+      value: "R$ 7,00"
     },
     {
       title: "BÔNUS 6 – Horta Medicinal em Casa",
       description: "Como cultivar suas próprias plantas medicinais",
-      value: "R$ 87,00"
+      value: "R$ 7,00"
     },
     {
       title: "Visão Restaurada de forma Natural",
       description: "Métodos naturais para melhorar a visão",
-      value: "R$ 97,00"
+      value: "R$ 7,00"
     },
     {
       title: "50 de Suplementos Naturais",
       description: "Receitas de suplementos caseiros eficazes",
-      value: "R$ 77,00"
+      value: "R$ 7,00"
     },
     {
       title: "Livro - Livre das Dores de Cabeça",
       description: "Soluções naturais para acabar com dores de cabeça",
-      value: "R$ 67,00"
+      value: "R$ 7,00"
     },
     {
       title: "10 Maneiras de acabar com a Coceira NATURALMENTE",
       description: "Tratamentos naturais para problemas de pele",
-      value: "R$ 57,00"
+      value: "R$ 7,00"
     },
     {
       title: "Ebook – Livre da Ansiedade",
       description: "Guia completo para superar a ansiedade naturalmente",
-      value: "R$ 87,00"
+      value: "R$ 7,00"
     },
     {
       title: "Acesso vitalício. Acesse todas as atualizações",
@@ -234,7 +244,7 @@ const Pricing: React.FC = () => {
                       <div className="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-natural-200">
                         <div className="flex justify-between items-center">
                           <span className="text-natural-700 text-sm md:text-base">Valor Total dos Bônus:</span>
-                          <span className="font-bold text-natural-800 text-sm md:text-base">R$ 867,00</span>
+                          <span className="font-bold text-natural-800 text-sm md:text-base">R$ 97,00</span>
                         </div>
                       </div>
                     </div>
@@ -287,6 +297,12 @@ const Pricing: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
+                 onClick={() => trackEvent('Purchase', {
+                   content_name: selectedPaymentOption === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+                   value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
+                   currency: 'BRL',
+                   payment_method: 'credit_card'
+                 })}
                 >
                   💳 Quero Minhas Receitas - Pagar no Cartão
                 </a>
@@ -296,6 +312,12 @@ const Pricing: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
+                 onClick={() => trackEvent('Purchase', {
+                   content_name: selectedPaymentOption === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+                   value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
+                   currency: 'BRL',
+                   payment_method: 'pix'
+                 })}
                 >
                   📱 Quero Minhas Receitas - Pagar no PIX
                 </a>

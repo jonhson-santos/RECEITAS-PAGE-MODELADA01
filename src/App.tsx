@@ -46,11 +46,10 @@ function App() {
         <Hero />
         <KnowledgeSection />
         <NaturalRemediesList />
-        <RecipeVideos />
-        <ScienceSection />
         <Gallery />
-        <Benefits />
+        <RecipeVideos />
         <Testimonials />
+        <Benefits />
         <Product />
         <Pricing />
         <FAQ />

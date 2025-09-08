@@ -107,9 +107,19 @@ const Hero: React.FC = () => {
             
             <div className="flex justify-center">
               <a 
+                href="#oferta" 
+                onClick={handleScrollToOffers}
+                className="inline-block bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white text-base md:text-lg font-bold px-8 md:px-10 py-4 md:py-5 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 animate-pulse"
+              >
+                🔥 Quero Meu Guia Agora
+              </a>
+            </div>
+            
+            <div className="flex justify-center mt-4">
+              <a 
                 href="#conhecimento" 
                 onClick={handleScrollToNext}
-                className="inline-block bg-natural-600 hover:bg-natural-700 text-white text-base md:text-lg font-bold px-8 md:px-10 py-4 md:py-5 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+                className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-6 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-base"
               >
                 ✨ Ver Como Funciona
               </a>

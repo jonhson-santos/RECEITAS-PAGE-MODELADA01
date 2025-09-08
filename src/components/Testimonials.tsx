@@ -11,7 +11,7 @@ const Testimonials: React.FC = () => {
       name: "Maria Silva",
       age: 58,
       location: "São Paulo, SP",
-      image: "https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg",
+      image: "https://i.pinimg.com/1200x/4c/eb/85/4ceb85b3066d28a976fc51dc75cfc763.jpg",
       quote: "Em 3 semanas seguindo as receitas do chá para diabetes, minha glicemia reduziu de 180 para 120. Meu médico ficou impressionado!",
       condition: "Diabetes Tipo 2",
       rating: 5
@@ -21,7 +21,7 @@ const Testimonials: React.FC = () => {
       name: "João Pereira",
       age: 45,
       location: "Belo Horizonte, MG", 
-      image: "https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg",
+      image: "https://i.pinimg.com/736x/d7/45/49/d7454953e338e985810634f4c30b8f20.jpg",
       quote: "Sofria com insônia há anos. Desde que comecei a preparar a mistura natural antes de dormir, consigo ter 7 horas de sono tranquilo.",
       condition: "Insônia Crônica",
       rating: 5
@@ -31,12 +31,30 @@ const Testimonials: React.FC = () => {
       name: "Ana Costa", 
       age: 52,
       location: "Rio de Janeiro, RJ",
-      image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+      image: "https://i.pinimg.com/736x/be/78/24/be7824a79d2a9a94dea3bc2dc1141873.jpg",
       quote: "Depois de 2 meses usando as receitas para ansiedade, consegui reduzir minhas crises e retomar o controle da minha vida.",
       condition: "Ansiedade",
       rating: 5
     }
   ];
+
+  const carouselImages = [
+    "https://ervasmedicinaisonline.shop/wp-content/uploads/2025/06/AnyConv.com__depoimento04.webp",
+    "https://ervasmedicinaisonline.shop/wp-content/uploads/2025/06/AnyConv.com__depoimento06.webp",
+    "https://ervasmedicinaisonline.shop/wp-content/uploads/2025/06/AnyConv.com__depoimento01-1.webp"
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === carouselImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -91,26 +109,6 @@ const Testimonials: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
-          {/* Garantia movida para cima */}
-          <div className="md:col-span-2 lg:col-span-3 mb-8">
-            <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6 md:p-8 text-white text-center">
-              <div className="flex items-center justify-center mb-4">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
-                  <span className="text-3xl">🛡️</span>
-                </div>
-                <div className="text-left">
-                  <h3 className="text-2xl font-bold mb-2">30 Dias de Garantia Total</h3>
-                  <p className="text-green-100">Se não funcionar, devolvemos 100% do seu dinheiro</p>
-                </div>
-              </div>
-              <p className="text-lg text-green-100">
-                Estamos tão confiantes que nossas receitas vão transformar sua saúde, 
-                que oferecemos garantia total. Sem riscos para você!
-              </p>
-            </div>
-          </div>
-          
-          {/* Depoimentos reformatados */}
           {testimonials.map((testimonial, index) => (
             <div 
               key={testimonial.id}
@@ -150,7 +148,65 @@ const Testimonials: React.FC = () => {
           ))}
         </div>
 
+        {/* Carrossel de Depoimentos */}
+        <div className="mt-12 max-w-4xl mx-auto">
+          <h3 className="text-center text-xl md:text-2xl font-bold text-natural-800 mb-6">
+            Mais Depoimentos de Transformação
+          </h3>
+          <div className="relative">
+            <div className="overflow-hidden rounded-xl shadow-lg">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
+              >
+                {carouselImages.map((image, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <img 
+                      src={image} 
+                      alt={`Depoimento ${index + 1}`}
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Indicadores */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {carouselImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentImageIndex ? 'bg-natural-600' : 'bg-natural-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div className="mt-8 md:mt-12 text-center bg-natural-50 rounded-lg md:rounded-xl p-4 md:p-6 lg:p-8 max-w-2xl mx-auto border border-natural-100 shadow-sm md:shadow-md">
+          {/* Garantia movida para baixo */}
+          <div className="mb-6">
+            <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6 text-white text-center">
+              <div className="flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-3xl">🛡️</span>
+                </div>
+                <div className="text-left">
+                  <h3 className="text-2xl font-bold mb-2">30 Dias de Garantia Total</h3>
+                  <p className="text-green-100">Se não funcionar, devolvemos 100% do seu dinheiro</p>
+                </div>
+              </div>
+              <p className="text-lg text-green-100">
+                Estamos tão confiantes que nossas receitas vão transformar sua saúde, 
+                que oferecemos garantia total. Sem riscos para você!
+              </p>
+            </div>
+          </div>
+          
           <p className="text-base md:text-lg text-natural-800 mb-3 md:mb-4">
             Você também pode transformar sua saúde com ingredientes simples da sua cozinha
           </p>
