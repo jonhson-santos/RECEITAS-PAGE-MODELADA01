@@ -299,9 +299,12 @@ const Pricing: React.FC = () => {
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
                  onClick={() => trackEvent('Purchase', {
                    content_name: selectedPaymentOption === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+                   content_category: 'ebook',
                    value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
                    currency: 'BRL',
-                   payment_method: 'credit_card'
+                   payment_method: 'credit_card',
+                   event_source_url: window.location.href,
+                   user_agent: navigator.userAgent
                  })}
                 >
                   💳 Quero Minhas Receitas - Pagar no Cartão
@@ -314,9 +317,12 @@ const Pricing: React.FC = () => {
                   className="block w-full bg-green-600 hover:bg-green-700 text-white font-medium py-4 px-6 rounded-full text-center transition-colors shadow-lg"
                  onClick={() => trackEvent('Purchase', {
                    content_name: selectedPaymentOption === 'standard' ? 'Farmácia Natural em Casa' : 'Farmácia Natural em Casa + Bônus',
+                   content_category: 'ebook',
                    value: selectedPaymentOption === 'standard' ? 9.99 : 27.00,
                    currency: 'BRL',
-                   payment_method: 'pix'
+                   payment_method: 'pix',
+                   event_source_url: window.location.href,
+                   user_agent: navigator.userAgent
                  })}
                 >
                   📱 Quero Minhas Receitas - Pagar no PIX

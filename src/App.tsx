@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import KnowledgeSection from './components/KnowledgeSection';
-import ScienceSection from './components/ScienceSection';
 import NaturalRemediesList from './components/NaturalRemediesList';
-import RecipeVideos from './components/RecipeVideos';
 import Gallery from './components/Gallery';
-import Benefits from './components/Benefits';
+import KnowledgeSection from './components/KnowledgeSection';
+import RecipeVideos from './components/RecipeVideos';
 import Testimonials from './components/Testimonials';
+import ScienceSection from './components/ScienceSection';
+import Benefits from './components/Benefits';
 import Product from './components/Product';
 import Pricing from './components/Pricing';
 import FAQ from './components/FAQ';
@@ -44,11 +44,12 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <KnowledgeSection />
         <NaturalRemediesList />
         <Gallery />
+        <KnowledgeSection />
         <RecipeVideos />
         <Testimonials />
+        <ScienceSection />
         <Benefits />
         <Product />
         <Pricing />
