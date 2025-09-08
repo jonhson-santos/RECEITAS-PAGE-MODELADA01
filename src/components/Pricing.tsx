@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ShieldCheck, Sparkles, Clock, CreditCard, X } from 'lucide-react';
-import { trackEvent } from '../types/global';
+import { trackEvent } from '../utils/utmify';
 
 const Pricing: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<'standard' | 'premium'>('premium');
