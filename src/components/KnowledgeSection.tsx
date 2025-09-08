@@ -103,10 +103,10 @@ const KnowledgeSection: React.FC = () => {
               </a>
               
               <a 
-                href="#receitas-lista" 
+                href="#videos-receitas" 
                 onClick={(e) => {
                   e.preventDefault();
-                  const nextSection = document.getElementById('receitas-lista');
+                  const nextSection = document.getElementById('videos-receitas');
                   if (nextSection) {
                     nextSection.scrollIntoView({ behavior: 'smooth' });
                   }
@@ -114,7 +114,7 @@ const KnowledgeSection: React.FC = () => {
                 className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-lg"
               >
                 <ArrowDown size={18} className="inline mr-2" />
-                Ver Mais Detalhes
+                Ver Demonstrações
               </a>
             </div>
           </div>

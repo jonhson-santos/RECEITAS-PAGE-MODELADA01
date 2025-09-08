@@ -103,17 +103,17 @@ const RecipeVideos: React.FC = () => {
               </a>
               
               <a 
-                href="#resultados-comprovados" 
+                href="#depoimentos" 
                 onClick={(e) => {
                   e.preventDefault();
-                  const nextSection = document.getElementById('resultados-comprovados');
+                  const nextSection = document.getElementById('depoimentos');
                   if (nextSection) {
                     nextSection.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
                 className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-lg"
               >
-                Ver Resultados Comprovados →
+                Ver Depoimentos →
               </a>
             </div>
           </div>

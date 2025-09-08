@@ -43,7 +43,7 @@ const ScienceSection: React.FC = () => {
 
   const handleScrollToNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const nextSection = document.getElementById('receitas-lista');
+    const nextSection = document.getElementById('beneficios');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -195,17 +195,17 @@ const ScienceSection: React.FC = () => {
               </a>
               
               <a 
-                href="#galeria" 
+                href="#beneficios" 
                 onClick={(e) => {
                   e.preventDefault();
-                  const nextSection = document.getElementById('galeria');
+                  const nextSection = document.getElementById('beneficios');
                   if (nextSection) {
                     nextSection.scrollIntoView({ behavior: 'smooth' });
                   }
                 }}
                 className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-8 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-lg"
               >
-                Ver Ingredientes Naturais →
+                Ver Benefícios →
               </a>
             </div>
           </div>

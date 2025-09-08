@@ -13,7 +13,7 @@ const Benefits: React.FC = () => {
 
   const handleScrollToNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const nextSection = document.getElementById('depoimentos');
+    const nextSection = document.getElementById('produto');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -66,12 +66,12 @@ const Benefits: React.FC = () => {
             </a>
             
             <a 
-              href="#depoimentos" 
+              href="#produto" 
               onClick={handleScrollToNext}
               className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-6 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-sm md:text-base"
             >
               <ArrowDown size={16} className="inline mr-2" />
-              Ver Depoimentos
+              Ver Produto
             </a>
           </div>
         </div>

@@ -89,7 +89,7 @@ const NaturalRemediesList: React.FC = () => {
 
   const handleScrollToNext = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    const nextSection = document.getElementById('videos-receitas');
+    const nextSection = document.getElementById('galeria');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -139,12 +139,12 @@ const NaturalRemediesList: React.FC = () => {
               </a>
               
               <a 
-                href="#videos-receitas" 
+                href="#galeria" 
                 onClick={handleScrollToNext}
                 className="inline-block border-2 border-natural-600 text-natural-600 hover:bg-natural-600 hover:text-white font-medium px-6 md:px-8 py-3 md:py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-sm md:text-base"
               >
                 <ArrowDown size={16} className="inline mr-2" />
-                Ver Demonstrações
+                Ver Ingredientes
               </a>
             </div>
             <p className="text-natural-600 text-sm">
