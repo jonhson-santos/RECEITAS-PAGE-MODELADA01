@@ -34,14 +34,34 @@
     
     <!-- UTMify Pixel - Only loads in production -->
     <script>
-      if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-        window.pixelId = "68be1608013346c26842c789";
-        var a = document.createElement("script");
-        a.setAttribute("async", "");
-        a.setAttribute("defer", "");
-        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
-        document.head.appendChild(a);
+      // UTMify Pixel - Configuração Global
+      window.pixelId = "68be1608013346c26842c789";
+      
+      // Função para carregar o pixel
+      function loadUTMifyPixel() {
+        var script = document.createElement("script");
+        script.async = true;
+        script.defer = true;
+        script.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+        script.onload = function() {
+          console.log("UTMify Pixel carregado com sucesso");
+        };
+        script.onerror = function() {
+          console.log("Erro ao carregar UTMify Pixel");
+        };
+        document.head.appendChild(script);
       }
+      
+      // Carregar imediatamente (mesmo em localhost para teste)
+      loadUTMifyPixel();
+      
+      // Backup: tentar novamente após 2 segundos se não carregou
+      setTimeout(function() {
+        if (!window.utmify) {
+          console.log("Tentando recarregar UTMify Pixel...");
+          loadUTMifyPixel();
+        }
+      }, 2000);
     </script>
     
     <!-- UTMify Pixel -->
